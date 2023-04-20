@@ -4,17 +4,32 @@ const router = express.Router()
 const app = express()
 const portNumber = 3333
 
-function showWomen(request, response) {
- response.json({
-        nome: 'Vanessa Moraes',
-        imagem: '',
-        minibio: 'Desenvolvedora, escritora e comunicadora'
-    })
-}
+function showWoman(request, response){
+ response.json(
+    [
+        {
+            nome: "Simara Conceição",
+            imagem: "https://bit.ly/LJIyOF",
+            minibio: "Desenvolvedora e instrutora"
+        },
 
-function displayDoor() {
+        {
+            nome: "Iana Chan",
+            imagem: "https://bit.ly/3JCXBqP",
+            minibio: "CEO e fundadora da Programaria"
+
+        },
+        {
+            nome: "Luana Pimentel",
+            imagem: "https://bit.ly/3FKpFaz",
+            minibio: "Staff Senior Software Engineer"
+        }
+    ]
+ )
+}
+function displayDoor(){
     console.log("Server created and running on port", portNumber )
 }
 
-app.use(router.get("/women",showWomen))
+app.use(router.get("/woman", showWoman))
 app.listen(portNumber, displayDoor)
