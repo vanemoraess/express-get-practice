@@ -7,36 +7,32 @@ app.use(express.json())
 const portNumber = 3333 //creating port
 
 //Initial list of women
-const women =[
+const women = [
+    {
+        id: "1",
+        nome: "Simara Conceição",
+        imagem: "https://bit.ly/LJIyOF",
+        minibio: "Desenvolvedora e instrutora"
+    },
 
+    {
+        id: "2",
+        nome: "Iana Chan",
+        imagem: "https://bit.ly/3JCXBqP",
+        minibio: "CEO e fundadora da Programaria"
+
+    },
+    {
+        id:"3",
+        nome: "Luana Pimentel",
+        imagem: "https://bit.ly/3FKpFaz",
+        minibio: "Staff Senior Software Engineer"
+    }
 ]
 
 //GET
 function showWomen(request, response){
- response.json(
-    [
-        {
-            id: "1",
-            nome: "Simara Conceição",
-            imagem: "https://bit.ly/LJIyOF",
-            minibio: "Desenvolvedora e instrutora"
-        },
-
-        {
-            id: "2",
-            nome: "Iana Chan",
-            imagem: "https://bit.ly/3JCXBqP",
-            minibio: "CEO e fundadora da Programaria"
-
-        },
-        {
-            id:"3",
-            nome: "Luana Pimentel",
-            imagem: "https://bit.ly/3FKpFaz",
-            minibio: "Staff Senior Software Engineer"
-        }
-    ]
- )
+ response.json(woman)
 }
 
 //POST
@@ -52,11 +48,37 @@ function addWoman(request, response){
     response.json(women)
 }
 
+//PATCH
+function fixWomenData(request, response){
+    function searchWomanForCorrection(woman) {
+        if (woman.id === request.params.id) {
+            return woman;
+        }
+    }
+    
+    const womanData = women.find(searchWomanForCorrection);
+   
+    if (request.body.nome){
+        womanData.nome = request.body.nome
+    }
+    if(request.body.minibio){
+        womanData.minibio = request.body.minibio
+    }
+    if(request.body.imagem){
+        womanData.imagem = request.body.imagem
+    }
+    response.json(women);
+}
+
+
 //PORT
 function displayDoor(){
     console.log("Server created and running on port", portNumber )
 }
 
+
+
 app.use(router.get("/women", showWomen))
 app.use(router.post("/women", addWoman))
+app.use(router.patch("/women/:id",fixWomenData )) 
 app.listen(portNumber, displayDoor) //server listening on port
