@@ -67,7 +67,19 @@ function fixWomenData(request, response){
     if(request.body.imagem){
         womanData.imagem = request.body.imagem
     }
-    response.json(women);
+    response.json(woman);
+}
+
+//DELETE
+function deleteWomenData(request, response){
+    function removeWomanById(woman){
+        if(woman.id !== request.params.id){
+            return woman;
+
+        }
+    }
+    const remainingWomen = women.filter(removeWomanById);
+    response.json(remainingWomen)
 }
 
 
@@ -81,4 +93,5 @@ function displayDoor(){
 app.use(router.get("/women", showWomen))
 app.use(router.post("/women", addWoman))
 app.use(router.patch("/women/:id",fixWomenData )) 
+app.use(router.delete("/women/:id", deleteWomenData))
 app.listen(portNumber, displayDoor) //server listening on port
