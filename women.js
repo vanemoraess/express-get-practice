@@ -32,7 +32,7 @@ const women = [
 
 //GET
 function showWomen(request, response){
- response.json(woman)
+ response.json(women)
 }
 
 //POST
