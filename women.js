@@ -2,6 +2,10 @@ const express = require("express") //starting Express
 const router = express.Router() //setting up the first part of the route
 const { v4: uuidv4 } = require('uuid');
 
+
+const connectToDatabase = require("./database")
+connectToDatabase()
+
 const app = express() //starting the app
 app.use(express.json())
 const portNumber = 3333 //creating port
