@@ -6,36 +6,19 @@ const { v4: uuidv4 } = require('uuid');
 const connectToDatabase = require("./database")
 connectToDatabase()
 
+const Woman = require("./womanModel")
 const app = express() //starting the app
 app.use(express.json())
 const portNumber = 3333 //creating port
 
-//Initial list of women
-const women = [
-    {
-        id: "1",
-        nome: "Simara Conceição",
-        imagem: "https://bit.ly/LJIyOF",
-        minibio: "Desenvolvedora e instrutora"
-    },
-
-    {
-        id: "2",
-        nome: "Iana Chan",
-        imagem: "https://bit.ly/3JCXBqP",
-        minibio: "CEO e fundadora da Programaria"
-
-    },
-    {
-        id:"3",
-        nome: "Luana Pimentel",
-        imagem: "https://bit.ly/3FKpFaz",
-        minibio: "Staff Senior Software Engineer"
-    }
-]
-
 //GET
-function showWomen(request, response){
+async function showWomen(request, response){
+    try{
+        const getWomenFromDatabase = await Woman.find()
+        response.json(getWomenFromDatabase)
+    }catch (erro){
+        console.log(erro)
+    }
  response.json(women)
 }
 
