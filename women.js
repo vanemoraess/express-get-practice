@@ -1,6 +1,5 @@
 const express = require("express") //starting Express
 const router = express.Router() //setting up the first part of the route
-const { v4: uuidv4 } = require('uuid');
 
 
 const connectToDatabase = require("./database")
@@ -23,50 +22,58 @@ async function showWomen(request, response){
 }
 
 //POST
-function addWoman(request, response){
-    const newWoman = {
-        id: uuidv4(),
+async function addWoman(request, response){
+    const newWoman = new Woman({
         nome: request.body.nome,
         imagem: request.body.imagem,
-        minibio: request.body.minibio
+        minibio: request.body.minibio,
+        citacao: request.body.citacao
+    })
+    try {
+        const createdWoman = await newWoman.save()
+        response.status(201).json(createdWoman)
+    } catch (erro){
+        console.log(erro)
     }
-
-    women.push(newWoman)
-    response.json(women)
 }
 
 //PATCH
-function fixWomenData(request, response){
-    function searchWomanForCorrection(woman) {
-        if (woman.id === request.params.id) {
-            return woman;
+async function fixWomenData(request, response){
+    try{
+        const searchWomanForCorrection = await Woman.findById(request.params.id)
+        if (request.body.nome){
+            womanData.nome = request.body.nome
         }
+        if(request.body.minibio){
+            womanData.minibio = request.body.minibio
+        }
+        if(request.body.imagem){
+            womanData.imagem = request.body.imagem
+        }
+        if (request.body.citacao){
+            womanData.citacao = request.body.citacao
+        }
+        const updatedWomanInDatabase = await womanData.save()
+        response.json(women);
+    } catch(erro){
+       console.log(erro)
+
     }
     
-    const womanData = women.find(searchWomanForCorrection);
-   
-    if (request.body.nome){
-        womanData.nome = request.body.nome
-    }
-    if(request.body.minibio){
-        womanData.minibio = request.body.minibio
-    }
-    if(request.body.imagem){
-        womanData.imagem = request.body.imagem
-    }
+
     response.json(woman);
 }
 
 //DELETE
-function deleteWomenData(request, response){
-    function removeWomanById(woman){
-        if(woman.id !== request.params.id){
-            return woman;
+async function deleteWomenData(request, response){
+    try {
+        await Woman.findByIdAndDelete(request.params.id)
+        response.json({messagem: "Inform that the deletion of the woman was successful!"})
 
-        }
+    }catch (erro){
+        console.log(erro)
     }
-    const remainingWomen = women.filter(removeWomanById);
-    response.json(remainingWomen)
+
 }
 
 
